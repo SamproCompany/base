@@ -1,1 +1,44 @@
-nfkjsnfkjsjkf
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Czat GPT-2 w przeglądarce</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 20px auto; }
+    #chat { white-space: pre-wrap; background: #f0f0f0; padding: 10px; border-radius: 5px; min-height: 100px; }
+    input, button { padding: 10px; margin-top: 10px; width: 100%; }
+  </style>
+</head>
+<body>
+  <h1>Czat GPT-2 (offline)</h1>
+  <div id="chat"></div>
+  <input id="userInput" placeholder="Napisz coś..." />
+  <button onclick="send()">Wyślij</button>
+
+  <script type="module">
+    import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0';
+
+    let generator;
+    const chatDiv = document.getElementById('chat');
+
+    async function loadModel() {
+      chatDiv.textContent = "🔄 Ładowanie modelu GPT-2...";
+      generator = await pipeline('text-generation', 'Xenova/gpt2');
+      chatDiv.textContent = "✅ Model gotowy! Napisz coś.";
+    }
+
+    async function send() {
+      const input = document.getElementById('userInput').value;
+      if (!input) return;
+      chatDiv.textContent += `\n🧑 Ty: ${input}`;
+
+      const output = await generator(input, { max_new_tokens: 50 });
+      const response = output[0].generated_text.replace(input, '').trim();
+      chatDiv.textContent += `\n🤖 AI: ${response}\n`;
+      document.getElementById('userInput').value = '';
+    }
+
+    loadModel();
+  </script>
+</body>
+</html>
