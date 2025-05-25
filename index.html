@@ -16,29 +16,33 @@
   <button onclick="send()">Wyślij</button>
 
   <script type="module">
-    import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0';
+  import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0';
 
-    let generator;
-    const chatDiv = document.getElementById('chat');
+  let generator;
+  const chatDiv = document.getElementById('chat');
 
-    async function loadModel() {
-      chatDiv.textContent = "🔄 Ładowanie modelu GPT-2...";
-      generator = await pipeline('text-generation', 'Xenova/gpt2');
-      chatDiv.textContent = "✅ Model gotowy! Napisz coś.";
-    }
+  async function loadModel() {
+    chatDiv.textContent = "🔄 Ładowanie modelu GPT-2...";
+    generator = await pipeline('text-generation', 'Xenova/gpt2');
+    chatDiv.textContent = "✅ Model gotowy! Napisz coś.";
+  }
 
-    async function send() {
-      const input = document.getElementById('userInput').value;
-      if (!input) return;
-      chatDiv.textContent += `\n🧑 Ty: ${input}`;
+  // Funkcja czatu
+  async function send() {
+    const input = document.getElementById('userInput').value;
+    if (!input) return;
+    chatDiv.textContent += `\n🧑 Ty: ${input}`;
 
-      const output = await generator(input, { max_new_tokens: 50 });
-      const response = output[0].generated_text.replace(input, '').trim();
-      chatDiv.textContent += `\n🤖 AI: ${response}\n`;
-      document.getElementById('userInput').value = '';
-    }
+    const output = await generator(input, { max_new_tokens: 50 });
+    const response = output[0].generated_text.replace(input, '').trim();
+    chatDiv.textContent += `\n🤖 AI: ${response}\n`;
+    document.getElementById('userInput').value = '';
+  }
 
-    loadModel();
-  </script>
+  // 🔧 Udostępniamy funkcję globalnie
+  window.send = send;
+
+  loadModel();
+</script>
 </body>
 </html>
