@@ -1,16 +1,16 @@
 <html>
   <head>
     <script>
-      fetch("https://muddy-wood-c2ce.intonowac-tkane1q.workers.dev/", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify('"EUR,PLN"')
-        })
-          .then(response => response.json())
-          .then(data => console.log(data))
-          .catch(error => console.error("Error:", error));        
+fetch("https://muddy-wood-c2ce.intonowac-tkane1q.workers.dev/", {
+  method: "POST",
+  headers: {
+    "Content-Type": "text/plain"
+  },
+  body: "EUR/PLN"
+})
+.then(res => res.json())
+.then(data => console.log("Kurs:", data))
+.catch(err => console.error(err));        
     </script>
   </head>
 </html>
